@@ -1,0 +1,22 @@
+[
+  {
+    "method": "POST",
+    "path": "/signin",
+    "handler": "signIn"
+  },
+  {
+    "method": "POST",
+    "path": "/signup",
+    "handler": "signUp"
+  },
+  {
+    "method": "GET",
+    "path": "/getApprovable",
+    "handler": "getApprovable"
+  },
+  {
+    "method": "GET",
+    "path": "/countApprovable",
+    "handler": "countApprovable"
+  }
+]
