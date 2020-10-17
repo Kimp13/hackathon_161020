@@ -4,7 +4,7 @@
   export async function preload(page, session) {
     try {
       const count = await getPreloadApiResponse(
-        `${session.apiUrl}/users/countApprovable`,
+        `${session.apiUrl}/users/countManageable`,
         {},
         this
       );
@@ -25,15 +25,50 @@
 </script>
 
 <script>
-  import { stores } from "@sapper/app";
+  import { stores, goto } from "@sapper/app";
+  import { onMount } from "svelte";
 
   import Title from "../../components/Title.svelte";
   import TransitionWrapper from "../../components/TransitionWrapper.svelte";
+  import Select from "../../components/Select.svelte";
   import Switchers from "../../components/approve_manage/Switchers.svelte";
 
   export let count;
 
+  let sortSelect, i, mounted = false;
   const { page } = stores();
+  const sortWays = [
+    ["Имя", "first_name"],
+    ["Фамилия", "last_name"],
+    ["По умолчанию", "id"],
+  ];
+
+  for (i = 0; i < sortWays.length; i += 1) {
+    if ($page.query.sort_by === sortWays[i][1]) {
+      sortSelect = i;
+      break;
+    }
+  }
+
+  if (i === sortWays.length) {
+    sortSelect = sortWays.length - 1;
+  }
+
+  onMount(() => {
+    mounted = true;
+  });
+
+  const checkSelect = () => {
+    if (mounted) {
+      if (sortWays[sortSelect][1] !== $page.query.sort_by) {
+        goto($page.path + "?sort_by=" + sortWays[sortSelect][1]);
+      }
+    }
+  };
+
+  $: if (sortSelect >= 0) {
+    checkSelect();
+  }
 </script>
 
 <style lang="sass">
@@ -52,11 +87,15 @@
     text-align: center
 </style>
 
-<Title caption="Подтверждение пользователей" />
+<Title caption="Подчинённые" />
 
 <TransitionWrapper>
   {#if count > 0}
     <div class="approve">
+      <Select
+        label="Сортировка"
+        options={sortWays.map((way) => way[0])}
+        bind:selectedIndex={sortSelect} />
       <div class="approve-content">
         <slot />
       </div>
@@ -65,8 +104,6 @@
       </div>
     </div>
   {:else}
-    <h2 class="no-approvable">
-      Пока что нет людей, которых Вы можете подтвердить.
-    </h2>
+    <h2 class="no-approvable">У Вас нет подчинённых.</h2>
   {/if}
 </TransitionWrapper>

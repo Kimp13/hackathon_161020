@@ -18,5 +18,20 @@
     "method": "GET",
     "path": "/countApprovable",
     "handler": "countApprovable"
+  },
+  {
+    "method": "GET",
+    "path": "/getManageable",
+    "handler": "getManageable"
+  },
+  {
+    "method": "GET",
+    "path": "/countManageable",
+    "handler": "countManageable"
+  },
+  {
+    "method": "POST",
+    "path": "/approve",
+    "handler": "approve"
   }
 ]

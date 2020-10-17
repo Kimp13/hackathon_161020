@@ -41,6 +41,14 @@
           transitionDirection.set(i - activeIndex);
         }
 
+        try {
+          tabsElements[activeIndex].deactivate()
+        } catch(e) {}
+
+        try {
+          tabsElements[i].activate();
+        } catch(e) {}
+
         activeIndex = i;
         return;
       }
@@ -56,28 +64,15 @@
     }
   };
 
-  let iconTabs = [
-    {
-      icon: "help",
-      label: "ЧАВО",
-      path: "/faq",
-      index: 0,
-    },
-  ];
-  let transitionDirection = writable(0);
-
-  setContext("transitionDirection", transitionDirection);
-
-  $: if (tabsElements.length > 0) {
-    setActive(segment);
-  }
-
-  session.subscribe((value) => {
-    let newIconTabs = iconTabs.slice(0, 1);
+  const updateIconTabs = user => {
+    const newIconTabs = iconTabs.slice(0, 1);
     let index;
 
-    if (value.user.isAuthenticated) {
-      if (getPermission(value.user.permissions, "approve")) {
+    if (user.isAuthenticated) {
+      if (
+        getPermission(user.permissions, ['user', 'approve']) &&
+        user.approved
+      ) {
         index =
           newIconTabs.push({
             icon: "check",
@@ -85,6 +80,19 @@
             path: "/approve/1",
           }) - 1;
 
+        newIconTabs[index].index = index;
+      }
+
+      if (
+        getPermission(user.permissions, ['user', 'manage']) &&
+        user.approved
+      ) {
+        index = newIconTabs.push({
+          icon: 'contact_page',
+          label: "Подчинённые",
+          path: '/manage/1'
+        }) - 1;
+        
         newIconTabs[index].index = index;
       }
 
@@ -110,7 +118,25 @@
     iconTabs = newIconTabs;
 
     setActive(segment);
-  });
+  };
+
+  let iconTabs = [
+    {
+      icon: "help",
+      label: "ЧАВО",
+      path: "/faq",
+      index: 0,
+    },
+  ];
+  let transitionDirection = writable(0);
+
+  setContext("transitionDirection", transitionDirection);
+
+  $: if (tabsElements.length > 0) {
+    setActive(segment);
+  }
+
+  $: updateIconTabs($session.user);
 </script>
 
 <style global lang="scss">

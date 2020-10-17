@@ -17,8 +17,17 @@
 <style lang="sass">
   :global(.button-component)
     :global(.button-component-icon)
-      font-size: 1.1rem
+      display: inline-flex
+      justify-content: center
+      align-items: center
+      width: 1.1rem
+      height: 1.1rem
       color: white
+
+    :global(.button-component-icon.alone)
+      margin: 0
+      width: 1.25rem
+      height: 1.25rem
 
     :global(.button-component-label)
       font-weight: 700
@@ -33,7 +42,9 @@
   {variant}
   on:click={dispatchClick}>
   {#if icon}
-    <Icon class="material-icons button-component-icon">{icon}</Icon>
+    <Icon class="material-icons button-component-icon {label ? '' : 'alone'}">
+      {icon}
+    </Icon>
   {/if}
   {#if label}
     <Label class="button-component-label">{label}</Label>

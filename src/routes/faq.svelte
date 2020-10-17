@@ -5,8 +5,17 @@
 
 <Title caption="ЧаВо" />
 
+<style lang="scss">
+  @import "../theme/colors";
+
+  .centered {
+    color: $mdc-theme-secondary;
+    text-align: center;
+  }
+</style>
+
 <TransitionWrapper>
-  <h1>
-    FAQ is going to be here.
-  </h1>
+  <h2 class="centered">
+    Тут ответы на частые вопросы.
+  </h2>
 </TransitionWrapper>

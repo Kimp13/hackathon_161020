@@ -191,22 +191,13 @@
       classSelect >= 0
     ) {
       if (!disabled) {
-        signUpPromise = new Promise((resolve, reject) => {
-          postApi($session.apiUrl + "/users/signup", {
-            username,
-            password,
-            roleId: info.roles[roleSelect].id,
-            classId: info.classes[classSelect].id,
-          }).then((res) => {
-            if (res.ok) {
-              res.json().then(
-                (json) => resolve(json),
-                (e) => reject(e)
-              );
-            } else {
-              reject(res);
-            }
-          });
+        signUpPromise = postApi($session.apiUrl + "/users/signup", {
+          firstName,
+          lastName,
+          username,
+          password,
+          roleId: info.roles[roleSelect].id,
+          classId: info.classes[classSelect].id,
         });
 
         signUpPromise.then(
@@ -257,14 +248,8 @@
   class="signup"
   transition:fly={{ x: 300, duration: 300 }}>
   <div class="fields">
-    <Textfield
-      bind:value={firstName}
-      error={firstNameError}
-      label="Имя" />
-    <Textfield
-      bind:value={lastName}
-      error={lastNameError}
-      label="Фамилия" />
+    <Textfield bind:value={firstName} error={firstNameError} label="Имя" />
+    <Textfield bind:value={lastName} error={lastNameError} label="Фамилия" />
   </div>
   <div class="fields">
     <Textfield bind:value={username} error={usernameError} label="Логин" />

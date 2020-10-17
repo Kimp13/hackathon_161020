@@ -8,7 +8,15 @@
 
 <Title caption="Профиль" />
 
+<style lang="sass">
+  .centered
+    margin: 1rem
+    display: flex
+    justify-content: center
+</style>
+
 <TransitionWrapper>
-  <h1>profile</h1>
-  <Button label="Выйти" on:click={() => goto('/logout')} />
+  <div class="centered">
+    <Button label="Выйти" on:click={() => goto('/logout')} />
+  </div>
 </TransitionWrapper>
